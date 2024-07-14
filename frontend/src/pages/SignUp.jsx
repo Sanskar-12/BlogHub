@@ -66,7 +66,7 @@ const SignUp = () => {
               <Label value="Username" />
               <TextInput
                 type="text"
-                placeholder="Username"
+                placeholder="abc..."
                 id="username"
                 onChange={handleChange}
               />
@@ -75,7 +75,7 @@ const SignUp = () => {
               <Label value="Email" />
               <TextInput
                 type="email"
-                placeholder="Email"
+                placeholder="example@gmail.com"
                 id="email"
                 onChange={handleChange}
               />
@@ -84,7 +84,7 @@ const SignUp = () => {
               <Label value="Password" />
               <TextInput
                 type="password"
-                placeholder="Password"
+                placeholder="*********"
                 id="password"
                 onChange={handleChange}
               />
