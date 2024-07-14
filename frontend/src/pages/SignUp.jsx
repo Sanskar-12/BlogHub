@@ -89,7 +89,11 @@ const SignUp = () => {
                 onChange={handleChange}
               />
             </div>
-            <Button gradientDuoTone="purpleToPink" type="submit">
+            <Button
+              gradientDuoTone="purpleToPink"
+              type="submit"
+              disabled={loading}
+            >
               {loading ? (
                 <>
                   <Spinner size="sm" />
