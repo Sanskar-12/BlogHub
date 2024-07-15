@@ -81,7 +81,7 @@ export const signIn = async (req, res, next) => {
         user,
       });
   } catch (error) {
-    onsole.log("SIGN IN ERROR", error);
+    console.log("SIGN IN ERROR", error);
     return next(new ErrorHandler(error, 400));
   }
 };
