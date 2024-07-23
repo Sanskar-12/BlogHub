@@ -13,7 +13,6 @@ const Header = () => {
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
 
-  console.log(currentUser)
 
   const handleSignOut = () => {};
 
@@ -64,10 +63,10 @@ const Header = () => {
             }
           >
             <Dropdown.Header>
-              <span className="block text-sm">
+              <span className="block text-sm p-1">
                 @{currentUser?.user?.username}
               </span>
-              <span className="block text-sm font-medium truncate">
+              <span className="block text-sm font-bold truncate pl-1">
                 {currentUser?.user?.email}
               </span>
             </Dropdown.Header>
