@@ -13,6 +13,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
 
+  console.log(currentUser)
+
   const handleSignOut = () => {};
 
   return (
@@ -53,6 +55,7 @@ const Header = () => {
             arrowIcon={false}
             inline
             label={
+              currentUser?.user?.profilePicture && 
               <Avatar
                 img={currentUser?.user?.profilePicture}
                 alt="User Image"
