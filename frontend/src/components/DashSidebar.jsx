@@ -21,7 +21,6 @@ const DashSidebar = () => {
     setTab(value);
   }, [location.search]);
 
-  console.log(currentUser)
 
   const handleSignOut=()=>{
 
