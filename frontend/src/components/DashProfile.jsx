@@ -9,7 +9,7 @@ import {
 } from "firebase/storage";
 import { CircularProgressbar } from "react-circular-progressbar";
 import { app } from "../firebase";
-import 'react-circular-progressbar/dist/styles.css';
+import "react-circular-progressbar/dist/styles.css";
 
 const DashProfile = () => {
   const [imageFile, setImageFile] = useState(null);
@@ -17,6 +17,7 @@ const DashProfile = () => {
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
+  const [formData, setFormData] = useState({});
 
   console.log(
     imageFileUploadProgress,
@@ -69,11 +70,17 @@ const DashProfile = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          setFormData({ ...formData, profilePicture: downloadUrl });
           setImageUrl(downloadUrl);
           setImageFileUploadError(false);
         });
       }
     );
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+
   };
 
   return (
@@ -130,14 +137,21 @@ const DashProfile = () => {
           id="username"
           placeholder="username"
           defaultValue={currentUser.user.username}
+          onChange={handleChange}
         />
         <TextInput
           type="email"
           id="email"
           placeholder="email"
           defaultValue={currentUser.user.email}
+          onChange={handleChange}
         />
-        <TextInput type="password" id="password" placeholder="password" />
+        <TextInput
+          type="password"
+          id="password"
+          placeholder="password"
+          onChange={handleChange}
+        />
         <Button type="submit" gradientDuoTone={"purpleToBlue"} outline>
           Update Profile
         </Button>
