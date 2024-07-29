@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
+import { Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
@@ -55,11 +55,17 @@ const Header = () => {
             inline
             label={
               currentUser?.user?.profilePicture && 
-              <Avatar
-                img={currentUser?.user?.profilePicture}
+              <img
+                src={currentUser?.user?.profilePicture}
                 alt="User Image"
-                rounded
+                className="rounded-full h-10 w-10"
+                
               />
+              // <Avatar
+              //   img={currentUser?.user?.profilePicture || photoImage}
+              //   alt="User Image"
+              //   rounded
+              // />
             }
           >
             <Dropdown.Header>
