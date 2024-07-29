@@ -5,6 +5,7 @@ import userRoute from "./routes/user.route.js";
 import authRoute from "./routes/auth.route.js";
 import ErrorMiddleware from "./middlewares/errorMiddleware.js";
 import cors from "cors";
+import cookieParser from "cookie-parser"
 
 config({
   path: "./.env",
@@ -14,6 +15,7 @@ const app = express();
 
 // middlwares
 app.use(express.json());
+app.use(cookieParser())
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
