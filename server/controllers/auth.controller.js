@@ -51,7 +51,7 @@ export const signIn = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password || email === "" || password === "") {
-      return next(ErrorHandler("All fields are required", 400));
+      return next(new ErrorHandler("All fields are required", 400));
     }
 
     const user = await User.findOne({ email }).select("+password");
@@ -73,7 +73,10 @@ export const signIn = async (req, res, next) => {
     return res
       .status(200)
       .cookie("bloghubtoken", token, {
+        maxAge: 15 * 24 * 60 * 60 * 1000,
+        sameSite: "none",
         httpOnly: true,
+        secure: true,
       })
       .json({
         success: true,
@@ -86,59 +89,65 @@ export const signIn = async (req, res, next) => {
   }
 };
 
-export const googleAuth=async(req,res,next)=>{
-  const {username,email,profilePicture}=req.body
+export const googleAuth = async (req, res, next) => {
+  const { username, email, profilePicture } = req.body;
 
-  const user=await User.findOne({email})
+  const user = await User.findOne({ email });
   try {
-    if(user)
-    {
+    if (user) {
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: 24 * 60 * 60 * 1000,
       });
 
       return res
-      .status(200)
-      .cookie("bloghubtoken", token, {
+        .status(200)
+        .cookie("bloghubtoken", token, {
+          maxAge: 15 * 24 * 60 * 60 * 1000,
+        sameSite: "none",
         httpOnly: true,
-      })
-      .json({
-        success: true,
-        message: "Signed In Successfully",
-        user,
-      });
-    }
-    else
-    {
-      const generatedPassword=Math.random().toString(36).slice(-8) +
-      Math.random().toString(36).slice(-8);
+        secure: true,
+        })
+        .json({
+          success: true,
+          message: "Signed In Successfully",
+          user,
+        });
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
 
-      const hashedPassword=await bcrypt.hash(generatedPassword,10)
+      const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
-      const user=await User.create({
-        username:username.toLowerCase().split(" ").join("")+Math.random().toString(9).slice(-4),
+      const user = await User.create({
+        username:
+          username.toLowerCase().split(" ").join("") +
+          Math.random().toString(9).slice(-4),
         email,
-        password:hashedPassword,
-        profilePicture
-      })
+        password: hashedPassword,
+        profilePicture,
+      });
 
       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: 24 * 60 * 60 * 1000,
       });
 
       return res
-      .status(200)
-      .cookie("bloghubtoken", token, {
-        httpOnly: true,
-      })
-      .json({
-        success: true,
-        message: "Signed In Successfully",
-        user,
-      });
+        .status(200)
+        .cookie("bloghubtoken", token, {
+          maxAge: 15 * 24 * 60 * 60 * 1000,
+          sameSite: "none",
+          httpOnly: true,
+          secure: true,
+        })
+        .json({
+          success: true,
+          message: "Signed In Successfully",
+          user,
+        });
     }
   } catch (error) {
     console.log("GOOGLE AUTH ERROR", error);
     return next(new ErrorHandler(error, 400));
   }
-}
+};

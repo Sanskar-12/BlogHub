@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Alert, Button, TextInput } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -10,6 +10,13 @@ import {
 import { CircularProgressbar } from "react-circular-progressbar";
 import { app } from "../firebase";
 import "react-circular-progressbar/dist/styles.css";
+import {
+  updateProfileFail,
+  updateProfileStart,
+  updateProfileSuccess,
+} from "../redux/user/userSlice";
+import axios from "axios";
+import { server } from "../redux/store";
 
 const DashProfile = () => {
   const [imageFile, setImageFile] = useState(null);
@@ -18,14 +25,12 @@ const DashProfile = () => {
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [formData, setFormData] = useState({});
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
 
-  console.log(
-    imageFileUploadProgress,
-    imageFileUploading,
-    imageFileUploadError
-  );
-
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+
   const filePickerRef = useRef();
 
   const handleChangeImage = (e) => {
@@ -80,13 +85,51 @@ const DashProfile = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUpdateUserError(null);
+    setUpdateUserSuccess(null);
+    if (Object.keys(formData).length === 0) {
+      setUpdateUserError("No changes made");
+      return;
+    }
+    if (imageFileUploading) {
+      setUpdateUserError("Please wait for image to upload");
+      return;
+    }
+
+    try {
+      dispatch(updateProfileStart());
+      const { data } = await axios.put(
+        `${server}/user/update/${currentUser.user._id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (data.success === false) {
+        dispatch(updateProfileFail(data.message));
+        setUpdateUserError(data.message);
+      } else {
+        dispatch(updateProfileSuccess(data));
+        setUpdateUserSuccess("Profile Updated Successfully");
+      }
+    } catch (error) {
+      dispatch(updateProfileFail(error.message));
+      setUpdateUserError(error.message);
+    }
   };
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-semibold text-3xl">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="file"
           accept="image/*"

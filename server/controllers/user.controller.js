@@ -21,19 +21,13 @@ export const updateUser = async (req, res, next) => {
   }
 
   if (username) {
-    if (username.length < 7 || username.length > 20) {
-      return next(
-        ErrorHandler("Username must be between 7 and 20 characters", 400)
-      );
-    }
-
     if (username.includes(" ")) {
-      return next(ErrorHandler("Username cannot contain spaces", 400));
+      return next(new ErrorHandler("Username cannot contain spaces", 400));
     }
 
     if (!username.match(/^[a-zA-Z0-9]+$/)) {
       return next(
-        ErrorHandler("Username can only contain letters and numbers", 400)
+        new ErrorHandler("Username can only contain letters and numbers", 400)
       );
     }
 
@@ -60,7 +54,11 @@ export const updateUser = async (req, res, next) => {
 
       await user.save();
 
-      return res.status(200).json(user);
+      return res.status(200).json({
+        message:"User Profile Updated",
+        success:true,
+        user
+      });
     } catch (error) {
       console.log("UPDATE USER ERROR", error);
       return next(new ErrorHandler(error, 400));
