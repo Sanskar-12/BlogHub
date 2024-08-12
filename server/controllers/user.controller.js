@@ -65,3 +65,23 @@ export const updateUser = async (req, res, next) => {
     return next(new ErrorHandler(error, 400));
   }
 };
+
+export const deleteUser = async (req, res, next) => {
+  const { userId } = req.params;
+
+  if (userId !== req.user._id) {
+    return next(new ErrorHandler("Unauthorised", 400));
+  }
+
+  try {
+    await User.findByIdAndDelete(userId);
+
+    return res.status(200).json({
+      message: "User Profile Deleted",
+      success: true,
+    });
+  } catch (error) {
+    console.log("DELETE USER ERROR", error);
+    return next(new ErrorHandler(error, 400));
+  }
+};
