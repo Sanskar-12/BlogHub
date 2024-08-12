@@ -103,9 +103,9 @@ export const googleAuth = async (req, res, next) => {
         .status(200)
         .cookie("bloghubtoken", token, {
           maxAge: 15 * 24 * 60 * 60 * 1000,
-        sameSite: "none",
-        httpOnly: true,
-        secure: true,
+          sameSite: "none",
+          httpOnly: true,
+          secure: true,
         })
         .json({
           success: true,
@@ -148,6 +148,18 @@ export const googleAuth = async (req, res, next) => {
     }
   } catch (error) {
     console.log("GOOGLE AUTH ERROR", error);
+    return next(new ErrorHandler(error, 400));
+  }
+};
+
+export const signOut = async (req, res, next) => {
+  try {
+    res.clearCookie("bloghubtoken").status(200).json({
+      success: true,
+      message: "Signed Out Successfully",
+    });
+  } catch (error) {
+    console.log("SIGN OUT ERROR", error);
     return next(new ErrorHandler(error, 400));
   }
 };

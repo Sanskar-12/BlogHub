@@ -5,6 +5,9 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
+import axios from "axios";
+import { server } from "../redux/store";
+import { signOutFail, signOutSuccess } from "../redux/user/userSlice";
 
 const Header = () => {
   const path = useLocation().pathname;
@@ -13,8 +16,19 @@ const Header = () => {
   const dispatch = useDispatch();
   const { theme } = useSelector((state) => state.theme);
 
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.post(`${server}/auth/signout`);
 
-  const handleSignOut = () => {};
+      if (res.success === false) {
+        dispatch(signOutFail(res.message));
+      } else {
+        dispatch(signOutSuccess());
+      }
+    } catch (error) {
+      dispatch(signOutFail(error.message));
+    }
+  };
 
   return (
     <Navbar className="border-b-2">
@@ -54,18 +68,13 @@ const Header = () => {
             arrowIcon={false}
             inline
             label={
-              currentUser?.user?.profilePicture && 
-              <img
-                src={currentUser?.user?.profilePicture}
-                alt="User Image"
-                className="rounded-full h-10 w-10"
-                
-              />
-              // <Avatar
-              //   img={currentUser?.user?.profilePicture || photoImage}
-              //   alt="User Image"
-              //   rounded
-              // />
+              currentUser?.user?.profilePicture && (
+                <img
+                  src={currentUser?.user?.profilePicture}
+                  alt="User Image"
+                  className="rounded-full h-10 w-10"
+                />
+              )
             }
           >
             <Dropdown.Header>
