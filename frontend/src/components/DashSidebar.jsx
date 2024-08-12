@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Sidebar } from "flowbite-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   HiUser,
   HiArrowSmRight,
@@ -10,9 +10,13 @@ import {
   HiAnnotation,
   HiChartPie,
 } from "react-icons/hi";
+import axios from "axios";
+import { server } from "../redux/store";
+import { signOutFail, signOutSuccess } from "../redux/user/userSlice";
 
 const DashSidebar = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const [tab, setTab] = useState(null);
   useEffect(() => {
@@ -21,10 +25,19 @@ const DashSidebar = () => {
     setTab(value);
   }, [location.search]);
 
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.post(`${server}/auth/signout`);
 
-  const handleSignOut=()=>{
-
-  }
+      if (res.success === false) {
+        dispatch(signOutFail(res.message));
+      } else {
+        dispatch(signOutSuccess());
+      }
+    } catch (error) {
+      dispatch(signOutFail(error.message));
+    }
+  };
 
   return (
     <Sidebar className="w-full md:w-56">
