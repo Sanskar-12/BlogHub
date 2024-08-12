@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 export const updateUser = async (req, res, next) => {
   const { userId } = req.params;
 
-  let {username,email,password,profilePicture}=req.body
+  let { username, email, password, profilePicture } = req.body;
 
   if (userId !== req.user._id) {
     return next(new ErrorHandler("Unauthorised", 400));
@@ -30,38 +30,38 @@ export const updateUser = async (req, res, next) => {
         new ErrorHandler("Username can only contain letters and numbers", 400)
       );
     }
+  }
 
-    try {
-      let user = await User.findById(userId).select("+password");
+  try {
+    let user = await User.findById(userId).select("+password");
 
-
-      if (!user) {
-        return next(new ErrorHandler("User Not Found", 400));
-      }
-
-      if (username) {
-        user.username = username;
-      }
-      if (password) {
-        user.password = password;
-      }
-      if (email) {
-        user.email = email;
-      }
-      if (profilePicture) {
-        user.profilePicture = profilePicture;
-      }
-
-      await user.save();
-
-      return res.status(200).json({
-        message:"User Profile Updated",
-        success:true,
-        user
-      });
-    } catch (error) {
-      console.log("UPDATE USER ERROR", error);
-      return next(new ErrorHandler(error, 400));
+    if (!user) {
+      return next(new ErrorHandler("User Not Found", 400));
     }
+
+    if (username) {
+      user.username = username;
+    }
+    if (password) {
+      user.password = password;
+    }
+    if (email) {
+      user.email = email;
+    }
+
+    if (profilePicture) {
+      user.profilePicture = profilePicture;
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      message: "User Profile Updated",
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.log("UPDATE USER ERROR", error);
+    return next(new ErrorHandler(error, 400));
   }
 };

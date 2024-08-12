@@ -29,7 +29,7 @@ const DashProfile = () => {
   const [updateUserError, setUpdateUserError] = useState(null);
 
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser,error,loading } = useSelector((state) => state.user);
 
   const filePickerRef = useRef();
 
@@ -78,6 +78,7 @@ const DashProfile = () => {
           setFormData({ ...formData, profilePicture: downloadUrl });
           setImageUrl(downloadUrl);
           setImageFileUploadError(false);
+          setImageFileUploading(false)
         });
       }
     );
@@ -95,6 +96,7 @@ const DashProfile = () => {
       setUpdateUserError("No changes made");
       return;
     }
+
     if (imageFileUploading) {
       setUpdateUserError("Please wait for image to upload");
       return;
@@ -203,6 +205,21 @@ const DashProfile = () => {
         <span className="cursor-pointer">Delete Account</span>
         <span className="cursor-pointer">Sign Out</span>
       </div>
+      {updateUserSuccess && (
+        <Alert color='success' className='mt-5'>
+          {updateUserSuccess}
+        </Alert>
+      )}
+      {updateUserError && (
+        <Alert color='failure' className='mt-5'>
+          {updateUserError}
+        </Alert>
+      )}
+      {error && (
+        <Alert color='failure' className='mt-5'>
+          {error}
+        </Alert>
+      )}
     </div>
   );
 };
