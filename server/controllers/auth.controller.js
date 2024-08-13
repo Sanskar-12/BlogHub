@@ -66,9 +66,13 @@ export const signIn = async (req, res, next) => {
       return next(new ErrorHandler("Email or Password is incorrect", 400));
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: 24 * 60 * 60 * 1000,
-    });
+    const token = jwt.sign(
+      { _id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: 24 * 60 * 60 * 1000,
+      }
+    );
 
     return res
       .status(200)
@@ -95,9 +99,13 @@ export const googleAuth = async (req, res, next) => {
   const user = await User.findOne({ email });
   try {
     if (user) {
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: 24 * 60 * 60 * 1000,
-      });
+      const token = jwt.sign(
+        { _id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: 24 * 60 * 60 * 1000,
+        }
+      );
 
       return res
         .status(200)
@@ -128,9 +136,13 @@ export const googleAuth = async (req, res, next) => {
         profilePicture,
       });
 
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: 24 * 60 * 60 * 1000,
-      });
+      const token = jwt.sign(
+        { _id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: 24 * 60 * 60 * 1000,
+        }
+      );
 
       return res
         .status(200)
