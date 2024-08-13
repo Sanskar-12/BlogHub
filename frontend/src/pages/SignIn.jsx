@@ -3,7 +3,11 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { signInFail, signInStart, signInSuccess } from "../redux/user/userSlice";
+import {
+  signInFail,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice";
 import { server } from "../redux/store";
 import OAuth from "../components/OAuth";
 
@@ -39,7 +43,7 @@ const SignIn = () => {
         navigate("/");
       }
     } catch (error) {
-      dispatch(signInFail(error.message));
+      dispatch(signInFail("Email or Password is Incorrect"));
     }
   };
 
@@ -93,7 +97,7 @@ const SignIn = () => {
                 "Sign In"
               )}
             </Button>
-            <OAuth/>
+            <OAuth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Dont have an account?</span>

@@ -11,6 +11,7 @@ import {
 import { CircularProgressbar } from "react-circular-progressbar";
 import { app } from "../firebase";
 import "react-circular-progressbar/dist/styles.css";
+import { Link } from "react-router-dom";
 import {
   deleteProfileFail,
   deleteProfileStart,
@@ -131,7 +132,7 @@ const DashProfile = () => {
         setUpdateUserSuccess("Profile Updated Successfully");
       }
     } catch (error) {
-      dispatch(updateProfileFail(error.message));
+      dispatch(updateProfileFail("Updating Profile Failed"));
       setUpdateUserError(error.message);
     }
   };
@@ -153,7 +154,7 @@ const DashProfile = () => {
         dispatch(deleteProfileSuccess());
       }
     } catch (error) {
-      dispatch(deleteProfileFail(error.message));
+      dispatch(deleteProfileFail("Deleting Profile Failed"));
     }
   };
 
@@ -167,7 +168,7 @@ const DashProfile = () => {
         dispatch(signOutSuccess());
       }
     } catch (error) {
-      dispatch(signOutFail(error.message));
+      dispatch(signOutFail("Sign Out Failed"));
     }
   };
 
@@ -243,6 +244,17 @@ const DashProfile = () => {
         <Button type="submit" gradientDuoTone={"purpleToBlue"} outline>
           {loading ? "Loading..." : "Update Profile"}
         </Button>
+        {currentUser.user.isAdmin && (
+          <Link to={"/create-post"}>
+            <Button
+              type="button"
+              gradientDuoTone="purpleToPink"
+              className="w-full"
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="text-red-500 flex justify-between mt-5">
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
