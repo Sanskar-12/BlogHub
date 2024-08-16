@@ -4,6 +4,19 @@
 
 body {
   height: 100vh;
+  margin: 0; /* Optional: removes default margin for body */
+  overflow: auto; /* Ensures scrolling is enabled */
+}
+
+/* Hide scrollbars for WebKit browsers (e.g., Chrome, Safari) */
+body::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar */
+}
+
+/* Hide scrollbars for Firefox and other browsers */
+body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 .ql-editor {
