@@ -24,6 +24,7 @@ const UpdatePost = () => {
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
   const params = useParams();
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const {currentUser}=useSelector(state=>state.user)
 
   useEffect(() => {
@@ -99,7 +100,7 @@ const UpdatePost = () => {
       }
       if (data.success) {
         setPublishError(null);
-        // navigate(`/post/${data.post.slug}`);
+        setUpdateUserSuccess("Post Updated Successfully")
       }
     } catch (error) {
       setPublishError("Something went wrong");
@@ -191,6 +192,11 @@ const UpdatePost = () => {
           </Alert>
         )}
       </form>
+      {updateUserSuccess && (
+        <Alert color="success" className="mt-5">
+          {updateUserSuccess}
+        </Alert>
+      )}
     </div>
   );
 };

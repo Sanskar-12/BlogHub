@@ -85,3 +85,45 @@ export const deleteUser = async (req, res, next) => {
     return next(new ErrorHandler(error, 400));
   }
 };
+
+export const getUsers = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(ErrorHandler("You are not allowed to see all users", 400));
+  }
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
+
+    const users = await User.find({})
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalUsers = await User.countDocuments();
+
+    const now = new Date();
+
+    const lastMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: {
+        $gte: lastMonth,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      users,
+      totalUsers,
+      lastMonthUsers,
+    });
+  } catch (error) {
+    console.log("GET ALL USER ERROR", error);
+    return next(new ErrorHandler(error, 400));
+  }
+};
