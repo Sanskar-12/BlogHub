@@ -66,7 +66,7 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-export const deleteUser = async (req, res, next) => {
+export const deleteUserProfile = async (req, res, next) => {
   const { userId } = req.params;
 
   if (userId !== req.user._id) {
@@ -124,6 +124,19 @@ export const getUsers = async (req, res, next) => {
     });
   } catch (error) {
     console.log("GET ALL USER ERROR", error);
+    return next(new ErrorHandler(error, 400));
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  const userId = req.params.userId;
+  if (!req.user.isAdmin && userId !== req.user._id) {
+    return next(ErrorHandler("You are not allowed to delete this users", 400));
+  }
+  try {
+    await User.findByIdAndDelete(userId);
+  } catch (error) {
+    console.log("DELETE USER ERROR", error);
     return next(new ErrorHandler(error, 400));
   }
 };

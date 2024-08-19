@@ -14,7 +14,7 @@ const DashUsers = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [postIdToDelete, setPostIdToDelete] = useState("");
+  const [userIdToDelete, setUserIdToDelete] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +31,7 @@ const DashUsers = () => {
     if (currentUser.user.isAdmin) {
       fetchData();
     }
-  }, [currentUser.user._id]);
+  }, [currentUser.user._id,users]);
 
   const handleShowMore = async () => {
     const startIndex = users.length;
@@ -53,26 +53,28 @@ const DashUsers = () => {
     }
   };
 
-  // const handleDeletePost = async () => {
-  //   setShowModal(false);
-  //   try {
-  //     const { data } = await axios.delete(
-  //       `${server}/user/delete-users/${postIdToDelete}/${currentUser.user._id}`,
-  //       {
-  //         withCredentials: true,
-  //       }
-  //     );
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      const { data } = await axios.delete(
+        `${server}/user/delete/user/${userIdToDelete}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-  //     if (data.success === false) {
-  //       console.log(data.message);
-  //     } else {
-  //       const arr = users.filter((post) => post._id !== postIdToDelete);
-  //       setUsers(arr);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
+      if (data.success === false) {
+        console.log(data.message);
+      } else {
+        const { data } = await axios.get(`${server}/user/get/all/users`, {
+          withCredentials: true,
+        });
+        setUsers(data.users);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
@@ -97,7 +99,7 @@ const DashUsers = () => {
                     <img
                       src={user.profilePicture}
                       alt="User Image"
-                      className='w-10 h-10 object-cover bg-gray-500 rounded-full'
+                      className="w-10 h-10 object-cover bg-gray-500 rounded-full"
                     />
                   </Table.Cell>
                   <Table.Cell>{user.username}</Table.Cell>
@@ -114,7 +116,7 @@ const DashUsers = () => {
                       className="font-medium text-red-500 hover:underline cursor-pointer"
                       onClick={() => {
                         setShowModal(true);
-                        setPostIdToDelete(user._id);
+                        setUserIdToDelete(user._id);
                       }}
                     >
                       Delete
@@ -150,7 +152,9 @@ const DashUsers = () => {
               Are you sure you want to delete this user?
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure">Yes, I'm sure</Button>
+              <Button color="failure" onClick={handleDeleteUser}>
+                Yes, I'm sure
+              </Button>
               <Button color="gray" onClick={() => setShowModal(false)}>
                 No, cancel
               </Button>
