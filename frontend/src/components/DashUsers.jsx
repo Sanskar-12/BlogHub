@@ -31,7 +31,7 @@ const DashUsers = () => {
     if (currentUser.user.isAdmin) {
       fetchData();
     }
-  }, [currentUser.user._id,users]);
+  }, [currentUser.user._id, users]);
 
   const handleShowMore = async () => {
     const startIndex = users.length;
