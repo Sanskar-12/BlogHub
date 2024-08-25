@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { server } from "../redux/store";
 import { Button, Spinner } from "flowbite-react";
 import PostCard from "../components/PostCard";
+import CommentSection from "../components/CommentSection";
 
 const PostPage = () => {
   const { postSlug } = useParams();
@@ -89,7 +90,7 @@ const PostPage = () => {
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
 
-      {/* <CommentSection postId={post._id} /> */}
+      <CommentSection postId={post._id} />
 
       <div className="flex flex-col justify-center items-center mb-5">
         <h1 className="text-xl mt-5">Recent articles</h1>
