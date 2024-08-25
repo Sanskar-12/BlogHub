@@ -149,3 +149,4 @@ export const updatePost = async (req, res, next) => {
     return next(new ErrorHandler(error, 400));
   }
 };
+
