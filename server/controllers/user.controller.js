@@ -140,3 +140,22 @@ export const deleteUser = async (req, res, next) => {
     return next(new ErrorHandler(error, 400));
   }
 };
+
+export const getUser=async(req,res,next)=>{
+  try {
+    const user=await User.findById(req.params.userId)
+
+    if(!user)
+    {
+      return next(ErrorHandler("User Not Found", 400));
+    }
+
+    return res.status(200).json({
+      success:true,
+      user
+    })
+  } catch (error) {
+    console.log("DELETE USER ERROR", error);
+    return next(new ErrorHandler(error, 400));
+  }
+}
