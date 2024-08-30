@@ -4,8 +4,6 @@ import jwt from "jsonwebtoken";
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.bloghubtoken;
 
-  console.log("hello",token)
-
   if (!token) {
     return next(new ErrorHandler("Unauthorised", 400));
   }
