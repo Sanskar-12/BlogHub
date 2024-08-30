@@ -1,11 +1,7 @@
 import { Footer } from "flowbite-react";
 import { Link } from "react-router-dom";
 import {
-  BsFacebook,
-  BsInstagram,
-  BsTwitter,
   BsGithub,
-  BsDribbble,
   BsLinkedin,
 } from "react-icons/bs";
 
@@ -54,7 +50,7 @@ export const FooterComponent = () => {
         <div className="w-full sm:flex sm:items-center sm:justify-between">
           <Footer.Copyright
             href="#"
-            by="Sahand's blog"
+            by="Blog Hub"
             year={new Date().getFullYear()}
           />
           <div className="flex gap-6 sm:mt-0 mt-4 sm:justify-center">
@@ -63,7 +59,7 @@ export const FooterComponent = () => {
               icon={BsLinkedin}
             />
             <Footer.Icon
-              href="https://github.com/sahandghavidel"
+              href="https://github.com/Sanskar-12"
               icon={BsGithub}
             />
           </div>

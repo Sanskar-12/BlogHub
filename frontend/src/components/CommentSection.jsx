@@ -96,7 +96,18 @@ const CommentSection = ({ postId }) => {
     }
   };
 
-  const handleEdit = () => {};
+  const handleEdit = (comment, editedComment) => {
+    setComments(
+      comments.map((c) =>
+        c._id === comment._id
+          ? {
+              ...c,
+              content: editedComment,
+            }
+          : c
+      )
+    );
+  };
 
   const handleDelete = (commentId) => {
     setShowModal(true);
