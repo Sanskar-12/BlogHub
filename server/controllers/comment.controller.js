@@ -32,7 +32,7 @@ export const getPostComments = async (req, res, next) => {
   const { postId } = req.params;
 
   try {
-    const comments = await Comment.find({postId}).sort({
+    const comments = await Comment.find({ postId }).sort({
       createdAt: -1,
     });
 
@@ -140,6 +140,50 @@ export const deleteComment = async (req, res, next) => {
     });
   } catch (error) {
     console.log("DELETE COMMENT ERROR", error);
+    return next(new ErrorHandler(error, 400));
+  }
+};
+
+export const getComments = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(
+      new ErrorHandler("You are not authorised to access the comments", 400)
+    );
+  }
+
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.order === "asc" ? 1 : -1;
+
+    const comments = await Comment.find()
+      .sort({ createdAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    const totalComments=await Comment.countDocuments();
+
+    const now = new Date();
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+
+    const lastMonthCreatedComments=await Comment.countDocuments({
+      createdAt:{
+        $gte:oneMonthAgo
+      }
+    })
+
+    return res.status(200).json({
+      success:true,
+      comments,
+      totalComments,
+      lastMonthCreatedComments
+    })
+  } catch (error) {
+    console.log("GET COMMENTS ERROR", error);
     return next(new ErrorHandler(error, 400));
   }
 };
