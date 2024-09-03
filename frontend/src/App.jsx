@@ -12,6 +12,7 @@ import CreatePost from "./pages/CreatePost";
 import OnlyAdminPrivateComponent from "./components/OnlyAdminPrivateRoute";
 import UpdatePost from "./pages/UpdatePosts";
 import PostPage from "./pages/PostPage";
+import Search from "./pages/Search";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/search" element={<Search />} />
         <Route element={<PrivateComponent />}>
           <Route path="/dashboard" element={<Dashboard />} />
         </Route>
