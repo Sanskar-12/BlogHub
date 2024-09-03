@@ -4,7 +4,6 @@ import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import { FooterComponent as Footer } from "./components/Footer";
 import PrivateComponent from "./components/PrivateComponent";
@@ -27,7 +26,6 @@ const App = () => {
         </Route>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/projects" element={<Projects />} />
         <Route element={<OnlyAdminPrivateComponent />}>
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/update-post/:postId" element={<UpdatePost />} />
